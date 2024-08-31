@@ -50,6 +50,9 @@ android {
 }
 
 dependencies {
+    // RCache
+    implementation(libs.rcache.android)
+    implementation(libs.androidx.security.crypto)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
