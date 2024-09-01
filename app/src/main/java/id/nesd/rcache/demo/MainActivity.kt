@@ -1,5 +1,6 @@
 package id.nesd.rcache.demo
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -53,22 +54,40 @@ class MainActivity : ComponentActivity() {
                             text = "RCache",
                         )
                     }
-                    FloatingMenuHome()
+                    FloatingMenuHome(onClick = {
+                        when (it) {
+                            MenuRouting.KEY -> {
+                                startActivity(Intent(this, KeyActivity::class.java))
+                            }
+
+                            MenuRouting.REMOVE -> {
+
+                            }
+
+                            MenuRouting.SAVE -> TODO()
+                            MenuRouting.READ -> TODO()
+                            MenuRouting.CLEAR -> TODO()
+                        }
+                    })
                 }
             }
         }
     }
 }
 
+enum class MenuRouting {
+    KEY, SAVE, READ, REMOVE, CLEAR
+}
+
 @Composable
-fun FloatingMenuHome() {
+fun FloatingMenuHome(onClick: (MenuRouting) -> Unit) {
     val isMenuOpen = remember {
         mutableStateOf(false)
     }
 
     FloatingMenu(isMenuOpen = isMenuOpen) {
         FloatingActionButton(
-            onClick = { /* Handle Action 1 */ },
+            onClick = { onClick(MenuRouting.CLEAR) },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -80,7 +99,7 @@ fun FloatingMenuHome() {
             }
         }
         FloatingActionButton(
-            onClick = { /* Handle Action 1 */ },
+            onClick = { onClick(MenuRouting.REMOVE) },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -92,7 +111,7 @@ fun FloatingMenuHome() {
             }
         }
         FloatingActionButton(
-            onClick = { /* Handle Action 1 */ },
+            onClick = { onClick(MenuRouting.READ) },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -104,7 +123,7 @@ fun FloatingMenuHome() {
             }
         }
         FloatingActionButton(
-            onClick = { /* Handle Action 1 */ },
+            onClick = { onClick(MenuRouting.SAVE) },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -116,7 +135,7 @@ fun FloatingMenuHome() {
             }
         }
         FloatingActionButton(
-            onClick = { /* Handle Action 1 */ },
+            onClick = { onClick(MenuRouting.KEY) },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
