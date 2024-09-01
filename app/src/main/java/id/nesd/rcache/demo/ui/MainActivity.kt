@@ -1,4 +1,4 @@
-package id.nesd.rcache.demo
+package id.nesd.rcache.demo.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import id.nesd.rcache.demo.ui.theme.RCacheDemoAndroidTheme
+import id.nesd.rcache.demo.utils.FloatingMenu
 
 class MainActivity : ComponentActivity() {
 

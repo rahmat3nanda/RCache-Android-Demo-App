@@ -1,4 +1,4 @@
-package id.nesd.rcache.demo
+package id.nesd.rcache.demo.utils
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn

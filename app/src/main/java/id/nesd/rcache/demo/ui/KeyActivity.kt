@@ -1,4 +1,4 @@
-package id.nesd.rcache.demo
+package id.nesd.rcache.demo.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

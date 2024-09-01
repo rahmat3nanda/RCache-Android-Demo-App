@@ -1,10 +1,12 @@
-package id.nesd.rcache.demo
+package id.nesd.rcache.demo.utils
 
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
 import com.google.gson.reflect.TypeToken
 import id.nesd.rcache.RCache
+import id.nesd.rcache.demo.AppRCacheKey
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
 enum class LogActionType(val stringValue: String) {
@@ -54,7 +56,7 @@ class LogManager private constructor() {
             LogModel(
                 action = action.stringValue,
                 value = value,
-                time = dateFormatter.format(java.util.Date())
+                time = dateFormatter.format(Date())
             )
         )
 
