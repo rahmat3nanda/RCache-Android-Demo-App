@@ -88,7 +88,10 @@ fun FloatingMenuHome(onClick: (MenuRouting) -> Unit) {
 
     FloatingMenu(isMenuOpen = isMenuOpen) {
         FloatingActionButton(
-            onClick = { onClick(MenuRouting.CLEAR) },
+            onClick = {
+                isMenuOpen.value = false
+                onClick(MenuRouting.CLEAR)
+            },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -100,7 +103,10 @@ fun FloatingMenuHome(onClick: (MenuRouting) -> Unit) {
             }
         }
         FloatingActionButton(
-            onClick = { onClick(MenuRouting.REMOVE) },
+            onClick = {
+                isMenuOpen.value = false
+                onClick(MenuRouting.REMOVE)
+            },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -112,7 +118,10 @@ fun FloatingMenuHome(onClick: (MenuRouting) -> Unit) {
             }
         }
         FloatingActionButton(
-            onClick = { onClick(MenuRouting.READ) },
+            onClick = {
+                isMenuOpen.value = false
+                onClick(MenuRouting.READ)
+            },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -124,7 +133,10 @@ fun FloatingMenuHome(onClick: (MenuRouting) -> Unit) {
             }
         }
         FloatingActionButton(
-            onClick = { onClick(MenuRouting.SAVE) },
+            onClick = {
+                isMenuOpen.value = false
+                onClick(MenuRouting.SAVE)
+            },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -136,7 +148,10 @@ fun FloatingMenuHome(onClick: (MenuRouting) -> Unit) {
             }
         }
         FloatingActionButton(
-            onClick = { onClick(MenuRouting.KEY) },
+            onClick = {
+                isMenuOpen.value = false
+                onClick(MenuRouting.KEY)
+            },
             modifier = Modifier.padding(bottom = 8.dp)
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
