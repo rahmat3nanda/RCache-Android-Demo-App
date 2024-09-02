@@ -53,7 +53,7 @@ class SaveModel : SaveContract.Model {
         when (dataType) {
             DataType.DATA -> {
                 value.toByteArray(Charsets.UTF_8).let { data ->
-                    storageType.rCache().save(data = data, key = key.rCacheKey())
+                    storageType.rCache().save(byteArray = data, key = key.rCacheKey())
                     addToLog(dataType, key, storageType, value)
                     completion(true, null)
                 }
