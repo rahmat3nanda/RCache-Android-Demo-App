@@ -6,7 +6,11 @@ import id.nesd.rcache.demo.KeyContract
 import id.nesd.rcache.demo.utils.LogActionType
 import id.nesd.rcache.demo.utils.LogManager
 
-data class KeyItem(val name: String)
+data class KeyItem(val name: String) {
+    fun rCacheKey(): RCache.Key {
+        return RCache.Key(name)
+    }
+}
 
 class KeyModel : KeyContract.Model<KeyItem> {
     override val items: MutableList<KeyItem> = mutableListOf()
