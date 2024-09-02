@@ -1,8 +1,6 @@
 package id.nesd.rcache.demo.utils
 
-import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import com.google.gson.reflect.TypeToken
 import id.nesd.rcache.RCache
 import id.nesd.rcache.demo.AppRCacheKey
 import java.text.SimpleDateFormat
@@ -16,6 +14,10 @@ enum class LogActionType(val stringValue: String) {
     REMOVE("Remove"),
     CLEAR("Clear")
 }
+
+data class LogRootModel(
+    val data: List<LogModel>
+)
 
 data class LogModel(
     @SerializedName("action") val action: String,
@@ -40,14 +42,15 @@ class LogManager private constructor() {
             }
     }
 
-    fun data(): List<LogModel>? {
-        val string = RCache.common.readString(AppRCacheKey.logs) ?: return null
-        val listType = object : TypeToken<List<LogModel>>() {}.type
-        val result: List<LogModel>? = Gson().fromJson(string, listType)
-        if (result != null) {
-            localData = result.toMutableList()
+    fun data(): List<LogModel> {
+        val data = RCache.common.readDataClass(
+            key = AppRCacheKey.logs,
+            classOfT = LogRootModel::class.java
+        )
+        if (data?.data != null) {
+            localData = data.data.toMutableList()
         }
-        return result
+        return localData
     }
 
     fun add(action: LogActionType, value: String) {
@@ -60,7 +63,6 @@ class LogManager private constructor() {
             )
         )
 
-        val json = Gson().toJson(localData)
-        RCache.common.save(string = json, key = AppRCacheKey.logs)
+        RCache.common.save(dataClass = LogRootModel(localData), key = AppRCacheKey.logs)
     }
 }
