@@ -64,10 +64,7 @@ class MainActivity : ComponentActivity() {
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = "RCache",
-                            )
-
+                            Text(text = "RCache")
                         }
                     } else {
                         LazyColumn(
@@ -97,7 +94,9 @@ class MainActivity : ComponentActivity() {
 
                             }
 
-                            MenuRouting.SAVE -> TODO()
+                            MenuRouting.SAVE -> {
+                                startActivity(Intent(this, SaveActivity::class.java))
+                            }
                             MenuRouting.READ -> TODO()
                             MenuRouting.CLEAR -> TODO()
                         }
