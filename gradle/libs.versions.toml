@@ -8,7 +8,7 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.04.01"
-rcacheAndroid = "1.0.3"
+rcacheAndroid = "1.0.4"
 securityCrypto = "1.1.0-alpha06"
 
 [libraries]
