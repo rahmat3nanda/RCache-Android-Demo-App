@@ -16,7 +16,7 @@ class KeyModel : KeyContract.Model<KeyItem> {
     override val items: MutableList<KeyItem> = mutableListOf()
 
     override fun loadItems() {
-        val keys: List<String>? = RCache.common.readArray(AppRCacheKey.savedKeys) as? List<String>?
+        val keys: List<String>? = RCache.common.readArray(AppRCacheKey.savedKeys)
         if (keys != null) {
             items.clear()
             items.addAll(keys.map { KeyItem(name = it) })
