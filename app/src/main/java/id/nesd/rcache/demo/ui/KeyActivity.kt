@@ -1,9 +1,13 @@
 package id.nesd.rcache.demo.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -26,6 +30,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import id.nesd.rcache.demo.KeyContract
@@ -37,7 +42,7 @@ import id.nesd.rcache.demo.utils.DismissibleList
 
 class KeyActivity : ComponentActivity(), KeyContract.View {
 
-    private var presenter: KeyPresenter? = null
+    private var presenter: KeyContract.Presenter? = null
     private var showAlert: MutableState<Boolean> = mutableStateOf(false)
     private val data = mutableStateListOf<KeyItem>()
 
@@ -78,23 +83,40 @@ class KeyActivity : ComponentActivity(), KeyContract.View {
                     }
                 ) { innerPadding ->
 
-                    DismissibleList(
-                        items = data,
-                        modifier = Modifier
-                            .padding(innerPadding),
-                        onDismiss = { item ->
-                            presenter?.delete(item)
+                    if (data.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .padding(innerPadding)
+                                .fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(text = "Empty")
                         }
-                    ) { item ->
-                        ListItem(
-                            headlineContent = {
-                                Text(text = item.name)
-                            },
-                        )
+                    } else {
+                        DismissibleList(
+                            items = data,
+                            modifier = Modifier
+                                .padding(innerPadding),
+                            onDismiss = { item ->
+                                presenter?.delete(item)
+                            }
+                        ) { item ->
+                            ListItem(
+                                headlineContent = {
+                                    Text(text = item.name)
+                                },
+                            )
+                        }
                     }
 
                     AddKeyDialog(showAlert = showAlert) {
-                        presenter?.add(it)
+                        if (it.trim().isEmpty()) {
+                            Toast.makeText(this@KeyActivity, "Cannot be empty", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            presenter?.add(it.trim())
+                        }
                     }
                 }
             }
