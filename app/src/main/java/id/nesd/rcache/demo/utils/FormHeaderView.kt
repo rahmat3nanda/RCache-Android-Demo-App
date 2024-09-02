@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -30,15 +28,13 @@ import androidx.compose.ui.unit.dp
 import id.nesd.rcache.demo.models.DataType
 import id.nesd.rcache.demo.models.KeyItem
 import id.nesd.rcache.demo.models.StorageType
-import java.security.Key
-
 
 @Composable
 fun FormHeaderView(
     modifier: Modifier = Modifier,
     dataType: DataType? = null,
-    key: KeyItem? = null,
-    storageType: StorageType? = null,
+    key: KeyItem?,
+    storageType: StorageType?,
     showAddKey: Boolean = false,
     showDataType: Boolean = true,
     sourceDataType: List<DataType>,
