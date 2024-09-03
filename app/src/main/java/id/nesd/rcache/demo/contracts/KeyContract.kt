@@ -1,4 +1,4 @@
-package id.nesd.rcache.demo
+package id.nesd.rcache.demo.contracts
 
 import id.nesd.rcache.demo.models.KeyItem
 

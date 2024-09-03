@@ -1,6 +1,6 @@
 package id.nesd.rcache.demo.presenters
 
-import id.nesd.rcache.demo.SaveContract
+import id.nesd.rcache.demo.contracts.SaveContract
 import id.nesd.rcache.demo.models.DataType
 import id.nesd.rcache.demo.models.KeyItem
 import id.nesd.rcache.demo.models.StorageType

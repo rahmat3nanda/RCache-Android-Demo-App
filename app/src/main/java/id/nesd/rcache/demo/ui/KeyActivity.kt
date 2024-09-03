@@ -33,7 +33,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import id.nesd.rcache.demo.KeyContract
+import id.nesd.rcache.demo.contracts.KeyContract
 import id.nesd.rcache.demo.models.KeyItem
 import id.nesd.rcache.demo.models.KeyModel
 import id.nesd.rcache.demo.presenters.KeyPresenter

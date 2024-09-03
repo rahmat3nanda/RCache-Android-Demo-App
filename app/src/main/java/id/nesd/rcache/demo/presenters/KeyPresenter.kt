@@ -1,6 +1,6 @@
 package id.nesd.rcache.demo.presenters
 
-import id.nesd.rcache.demo.KeyContract
+import id.nesd.rcache.demo.contracts.KeyContract
 import id.nesd.rcache.demo.models.KeyItem
 
 class KeyPresenter(

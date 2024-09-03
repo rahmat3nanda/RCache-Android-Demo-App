@@ -2,7 +2,7 @@ package id.nesd.rcache.demo.models
 
 import id.nesd.rcache.RCache
 import id.nesd.rcache.RCaching
-import id.nesd.rcache.demo.SaveContract
+import id.nesd.rcache.demo.contracts.SaveContract
 import id.nesd.rcache.demo.utils.LogActionType
 import id.nesd.rcache.demo.utils.LogManager
 
