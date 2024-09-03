@@ -10,7 +10,12 @@ interface ReadContract {
     }
 
     interface Model {
-        fun read(key: KeyItem, storageType: StorageType, dataType: DataType)
+        fun read(
+            key: KeyItem,
+            storageType: StorageType,
+            dataType: DataType,
+            completion: (String) -> Unit
+        )
     }
 
     interface Presenter {
