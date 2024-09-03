@@ -76,7 +76,6 @@ class RemoveActivity : ComponentActivity(), RemoveContract.View {
                         }
                     )
 
-
                     Spacer(modifier = Modifier.weight(1f))
 
                     Button(
