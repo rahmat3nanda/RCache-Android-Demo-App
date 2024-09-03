@@ -29,7 +29,6 @@ import id.nesd.rcache.demo.models.StorageType
 import id.nesd.rcache.demo.presenters.ReadPresenter
 import id.nesd.rcache.demo.utils.AppScaffold
 import id.nesd.rcache.demo.utils.FormHeaderView
-import id.nesd.rcache.demo.utils.Router.route
 
 class ReadActivity : ComponentActivity(), ReadContract.View {
 
