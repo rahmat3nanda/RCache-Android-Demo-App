@@ -7,12 +7,12 @@ import id.nesd.rcache.demo.utils.LogActionType
 import id.nesd.rcache.demo.utils.LogManager
 
 enum class DataType(val stringValue: String) {
-    DATA("Data"),
+    BYTE_ARRAY("ByteArray"),
     STRING("String"),
     BOOL("Boolean"),
     INTEGER("Integer"),
     ARRAY("Array"),
-    DICTIONARY("Dictionary"),
+    MAP("Map"),
     DOUBLE("Double"),
     FLOAT("Float");
 
@@ -25,7 +25,7 @@ enum class DataType(val stringValue: String) {
 
     fun isUseTextField(): Boolean {
         return when (this) {
-            BOOL, ARRAY, DICTIONARY -> false
+            BOOL, ARRAY, MAP -> false
             else -> true
         }
     }
@@ -51,7 +51,7 @@ class SaveModel : SaveContract.Model {
         completion: (Boolean, String?) -> Unit
     ) {
         when (dataType) {
-            DataType.DATA -> {
+            DataType.BYTE_ARRAY -> {
                 value.toByteArray(Charsets.UTF_8).let { data ->
                     storageType.rCache().save(byteArray = data, key = key.rCacheKey())
                     addToLog(dataType, key, storageType, value)
@@ -80,7 +80,7 @@ class SaveModel : SaveContract.Model {
                 } ?: completion(false, "Invalid Integer")
             }
 
-            DataType.ARRAY, DataType.DICTIONARY -> completion(false, "Not Implemented")
+            DataType.ARRAY, DataType.MAP -> completion(false, "Not Implemented")
 
             DataType.DOUBLE -> {
                 value.toDoubleOrNull()?.let { double ->

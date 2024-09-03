@@ -10,7 +10,7 @@ class ReadModel : ReadContract.Model {
         completion: (String) -> Unit
     ) {
         when (dataType) {
-            DataType.DATA -> {
+            DataType.BYTE_ARRAY -> {
                 val value = storageType.rCache().readByteArray(key = key.rCacheKey())
                 completion(String(bytes = value ?: "null".toByteArray()))
             }
@@ -30,7 +30,7 @@ class ReadModel : ReadContract.Model {
                 completion(value?.toString() ?: "null")
             }
 
-            DataType.ARRAY, DataType.DICTIONARY -> TODO()
+            DataType.ARRAY, DataType.MAP -> TODO()
 
             DataType.DOUBLE -> {
                 val value = storageType.rCache().readDouble(key = key.rCacheKey())
