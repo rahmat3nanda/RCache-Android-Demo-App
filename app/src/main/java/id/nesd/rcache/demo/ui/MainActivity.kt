@@ -62,16 +62,19 @@ class MainActivity : ComponentActivity() {
                     LazyColumn(
                         modifier = Modifier
                             .padding(innerPadding),
-                        reverseLayout = true,
                         contentPadding = PaddingValues(12.dp)
                     ) {
                         items(logs) { log ->
-                            HorizontalDivider()
-                            Spacer(modifier = Modifier.height(12.dp))
+                            if (logs.indexOf(log) > 0) {
+                                Spacer(modifier = Modifier.height(12.dp))
+                            }
                             Text(
                                 text = "Date: ${log.time}\nAction: ${log.action}\nValue: ${log.value}"
                             )
                             Spacer(modifier = Modifier.height(12.dp))
+                            if (logs.indexOf(log) < logs.size - 1) {
+                                HorizontalDivider()
+                            }
                         }
                     }
                 }
@@ -79,14 +82,9 @@ class MainActivity : ComponentActivity() {
                 FloatingMenuHome(onClick = {
                     when (it) {
                         MenuRouting.KEY -> route(to = KeyActivity::class.java)
-
-                        MenuRouting.REMOVE -> {
-
-                        }
-
+                        MenuRouting.REMOVE -> route(to = RemoveActivity::class.java)
                         MenuRouting.SAVE -> route(to = SaveActivity::class.java)
                         MenuRouting.READ -> route(to = ReadActivity::class.java)
-
                         MenuRouting.CLEAR -> TODO()
                     }
                 })
@@ -97,7 +95,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         logs.clear()
-        logs.addAll(LogManager.instance.data() ?: emptyList())
+        logs.addAll(LogManager.instance.data().reversed())
     }
 }
 
