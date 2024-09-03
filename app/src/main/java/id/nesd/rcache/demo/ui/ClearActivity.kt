@@ -5,42 +5,32 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import id.nesd.rcache.demo.contracts.ClearContract
 import id.nesd.rcache.demo.models.ClearModel
 import id.nesd.rcache.demo.models.ClearType
-import id.nesd.rcache.demo.models.StorageType
 import id.nesd.rcache.demo.presenters.ClearPresenter
 import id.nesd.rcache.demo.utils.AppScaffold
+import id.nesd.rcache.demo.utils.DropdownPicker
 
 class ClearActivity : ComponentActivity(), ClearContract.View {
 
     private var presenter: ClearContract.Presenter? = null
 
     private val clearType = mutableStateOf<ClearType?>(null)
-    private val clearTypeExpanded = mutableStateOf(false)
     private val buttonEnabled = mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,43 +51,15 @@ class ClearActivity : ComponentActivity(), ClearContract.View {
                         .padding(horizontal = 12.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Clear Type:")
-                        Spacer(modifier = Modifier.weight(1f))
-                        Box {
-                            Text(
-                                text = clearType.value?.stringValue ?: "Select Clear Type",
-                                color = Color.Blue,
-                                modifier = Modifier
-                                    .clickable {
-                                        clearTypeExpanded.value = !clearTypeExpanded.value
-                                    }
-                                    .padding(vertical = 8.dp)
-                            )
-                            DropdownMenu(
-                                expanded = clearTypeExpanded.value,
-                                onDismissRequest = { clearTypeExpanded.value = false }
-                            ) {
-                                ClearType.entries.forEach {
-                                    DropdownMenuItem(
-                                        text = { Text(text = it.stringValue) },
-                                        leadingIcon = {
-                                            if (clearType.value?.stringValue == it.stringValue) {
-                                                Icon(
-                                                    imageVector = Icons.Default.Check,
-                                                    contentDescription = null,
-                                                )
-                                            }
-                                        },
-                                        onClick = {
-                                            clearTypeExpanded.value = false
-                                            clearType.value = it
-                                            check()
-                                        }
-                                    )
-                                }
-                            }
-                        }
+                    DropdownPicker(
+                        title = "Clear Type:",
+                        placeholder = "Select Clear Type",
+                        selected = clearType.value,
+                        sources = ClearType.entries,
+                        titleForItem = { it.stringValue }
+                    ) {
+                        clearType.value = it
+                        check()
                     }
 
                     Spacer(modifier = Modifier.weight(1f))
