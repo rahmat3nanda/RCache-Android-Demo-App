@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
                         MenuRouting.REMOVE -> route(to = RemoveActivity::class.java)
                         MenuRouting.SAVE -> route(to = SaveActivity::class.java)
                         MenuRouting.READ -> route(to = ReadActivity::class.java)
-                        MenuRouting.CLEAR -> TODO()
+                        MenuRouting.CLEAR -> route(to = ClearActivity::class.java)
                     }
                 })
             }
