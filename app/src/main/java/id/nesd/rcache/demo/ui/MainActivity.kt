@@ -1,6 +1,5 @@
 package id.nesd.rcache.demo.ui
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -38,6 +37,7 @@ import id.nesd.rcache.demo.ui.theme.RCacheDemoAndroidTheme
 import id.nesd.rcache.demo.utils.FloatingMenu
 import id.nesd.rcache.demo.utils.LogManager
 import id.nesd.rcache.demo.utils.LogModel
+import id.nesd.rcache.demo.utils.Router.route
 
 class MainActivity : ComponentActivity() {
 
@@ -86,18 +86,15 @@ class MainActivity : ComponentActivity() {
 
                     FloatingMenuHome(onClick = {
                         when (it) {
-                            MenuRouting.KEY -> {
-                                startActivity(Intent(this, KeyActivity::class.java))
-                            }
+                            MenuRouting.KEY -> route(to = KeyActivity::class.java)
 
                             MenuRouting.REMOVE -> {
 
                             }
 
-                            MenuRouting.SAVE -> {
-                                startActivity(Intent(this, SaveActivity::class.java))
-                            }
-                            MenuRouting.READ -> TODO()
+                            MenuRouting.SAVE -> route(to = SaveActivity::class.java)
+                            MenuRouting.READ -> route(to = ReadActivity::class.java)
+
                             MenuRouting.CLEAR -> TODO()
                         }
                     })
