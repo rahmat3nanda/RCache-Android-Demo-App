@@ -1,6 +1,7 @@
 package id.nesd.rcache.demo.ui
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -13,33 +14,29 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import id.nesd.rcache.demo.contracts.ReadContract
+import id.nesd.rcache.demo.contracts.RemoveContract
 import id.nesd.rcache.demo.models.DataType
 import id.nesd.rcache.demo.models.KeyItem
 import id.nesd.rcache.demo.models.KeyModel
-import id.nesd.rcache.demo.models.ReadModel
+import id.nesd.rcache.demo.models.RemoveModel
 import id.nesd.rcache.demo.models.StorageType
-import id.nesd.rcache.demo.presenters.ReadPresenter
+import id.nesd.rcache.demo.presenters.RemovePresenter
 import id.nesd.rcache.demo.utils.AppScaffold
 import id.nesd.rcache.demo.utils.FormHeaderView
-import id.nesd.rcache.demo.utils.Router.route
 
-class ReadActivity : ComponentActivity(), ReadContract.View {
+class RemoveActivity : ComponentActivity(), RemoveContract.View {
 
-    private var presenter: ReadContract.Presenter? = null
-    private val string = mutableStateOf("")
+    private var presenter: RemoveContract.Presenter? = null
 
     private val keyModel = KeyModel()
     private val keys = mutableStateListOf<KeyItem>()
 
-    private val dataType = mutableStateOf<DataType?>(null)
     private val key = mutableStateOf<KeyItem?>(null)
     private val storageType = mutableStateOf<StorageType?>(null)
 
@@ -48,7 +45,7 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        presenter = ReadPresenter(this, ReadModel())
+        presenter = RemovePresenter(this, RemoveModel())
 
         enableEdgeToEdge()
         setContent {
@@ -63,16 +60,12 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     FormHeaderView(
-                        dataType = dataType.value,
+                        showDataType = false,
                         key = key.value,
                         storageType = storageType.value,
                         sourceDataType = DataType.entries,
                         sourceKey = keys,
                         sourceStorageType = StorageType.entries,
-                        dataTypeChanged = {
-                            dataType.value = it
-                            check()
-                        },
                         keyChanged = {
                             key.value = it
                             check()
@@ -83,11 +76,6 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
                         }
                     )
 
-                    HorizontalDivider()
-
-                    if (string.value.isNotEmpty()) {
-                        Text("Result:\n${string.value}")
-                    }
 
                     Spacer(modifier = Modifier.weight(1f))
 
@@ -106,7 +94,7 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
                             .padding(vertical = 8.dp)
                     ) {
                         Text(
-                            text = "Read",
+                            text = "Remove",
                             color = Color.White,
                             modifier = Modifier.padding(vertical = 8.dp)
                         )
@@ -114,10 +102,6 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
                 }
             }
         }
-    }
-
-    override fun readResult(string: String) {
-        this.string.value = string
     }
 
     override fun onResume() {
@@ -133,15 +117,18 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
     }
 
     private fun check() {
-        buttonEnabled.value =
-            dataType.value != null && key.value != null && storageType.value != null
+        buttonEnabled.value = key.value != null && storageType.value != null
     }
 
     private fun submit() {
-        presenter?.read(
-            dataType = dataType.value!!,
+        presenter?.remove(
             key = key.value!!,
             storageType = storageType.value!!
         )
+        Toast.makeText(
+            this,
+            "Success remove variable with key ${key.value?.name ?: ""} from ${storageType.value?.stringValue ?: ""}",
+            Toast.LENGTH_SHORT
+        ).show()
     }
 }
