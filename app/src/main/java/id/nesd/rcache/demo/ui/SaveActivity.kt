@@ -2,7 +2,6 @@ package id.nesd.rcache.demo.ui
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -51,6 +50,7 @@ import id.nesd.rcache.demo.models.StorageType
 import id.nesd.rcache.demo.presenters.SavePresenter
 import id.nesd.rcache.demo.ui.theme.RCacheDemoAndroidTheme
 import id.nesd.rcache.demo.utils.FormHeaderView
+import id.nesd.rcache.demo.utils.Router.route
 
 class SaveActivity : ComponentActivity(), SaveContract.View {
 
@@ -116,7 +116,7 @@ class SaveActivity : ComponentActivity(), SaveContract.View {
                                 check()
                             },
                             didAddKey = {
-                                startActivity(Intent(this@SaveActivity, KeyActivity::class.java))
+                                this@SaveActivity.route(to = KeyActivity::class.java)
                             },
                             storageTypeChanged = {
                                 storageType.value = it
