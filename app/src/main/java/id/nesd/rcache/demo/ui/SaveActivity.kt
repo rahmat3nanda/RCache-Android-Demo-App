@@ -20,19 +20,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +41,7 @@ import id.nesd.rcache.demo.models.KeyModel
 import id.nesd.rcache.demo.models.SaveModel
 import id.nesd.rcache.demo.models.StorageType
 import id.nesd.rcache.demo.presenters.SavePresenter
-import id.nesd.rcache.demo.ui.theme.RCacheDemoAndroidTheme
+import id.nesd.rcache.demo.utils.AppScaffold
 import id.nesd.rcache.demo.utils.FormHeaderView
 import id.nesd.rcache.demo.utils.Router.route
 
@@ -66,7 +59,6 @@ class SaveActivity : ComponentActivity(), SaveContract.View {
     private val fieldValue = mutableStateOf("")
     private val buttonEnabled = mutableStateOf(false)
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -74,113 +66,99 @@ class SaveActivity : ComponentActivity(), SaveContract.View {
 
         enableEdgeToEdge()
         setContent {
-            RCacheDemoAndroidTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        TopAppBar(
-                            title = { Text(text = "RCache: Save") },
-                            navigationIcon = {
-                                IconButton(onClick = { finish() }) {
-                                    Icon(
-                                        imageVector = Icons.Default.ArrowBack,
-                                        contentDescription = "Back"
-                                    )
-                                }
-                            },
+            AppScaffold(
+                activity = this,
+                modifier = Modifier.fillMaxSize()
+            ) { innerPadding ->
+                Column(
+                    modifier = Modifier
+                        .padding(innerPadding)
+                        .padding(horizontal = 12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    FormHeaderView(
+                        dataType = dataType.value,
+                        key = key.value,
+                        storageType = storageType.value,
+                        showAddKey = true,
+                        sourceDataType = DataType.entries,
+                        sourceKey = keys,
+                        sourceStorageType = StorageType.entries,
+                        dataTypeChanged = {
+                            dataType.value = it
+                            fieldValue.value = ""
+                            this@SaveActivity.hideKeyboard()
+                            check()
+                        },
+                        keyChanged = {
+                            key.value = it
+                            check()
+                        },
+                        didAddKey = {
+                            this@SaveActivity.route(to = KeyActivity::class.java)
+                        },
+                        storageTypeChanged = {
+                            storageType.value = it
+                            check()
+                        }
+                    )
+
+                    HorizontalDivider()
+
+                    Text("Value:")
+
+                    if (dataType.value == DataType.BOOL) {
+                        RadioButtonGroup(
+                            items = listOf("TRUE", "FALSE"),
+                            selectedItem = fieldValue.value,
+                            onItemSelected = { value ->
+                                fieldValue.value = value
+                                check()
+                            }
                         )
-                    },
-                ) { innerPadding ->
-                    Column(
+                    }
+
+                    if (dataType.value?.isUseTextField() == true) {
+                        val keyboardType = if (dataType.value?.isNumber() == true) {
+                            KeyboardType.Decimal
+                        } else {
+                            KeyboardType.Text
+                        }
+
+                        TextField(
+                            value = fieldValue.value,
+                            onValueChange = { newValue ->
+                                fieldValue.value = newValue
+                                check()
+                            },
+                            label = { Text("Value") },
+                            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.weight(1f))
+
+
+                    Button(
+                        onClick = { submit() },
+                        enabled = buttonEnabled.value,
+                        shape = RoundedCornerShape(8.dp),
+                        colors = ButtonColors(
+                            containerColor = Color.Blue,
+                            contentColor = Color.White,
+                            disabledContainerColor = Color.Gray,
+                            disabledContentColor = Color.White
+                        ),
                         modifier = Modifier
-                            .padding(innerPadding)
-                            .padding(horizontal = 12.dp),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
                     ) {
-                        FormHeaderView(
-                            dataType = dataType.value,
-                            key = key.value,
-                            storageType = storageType.value,
-                            showAddKey = true,
-                            sourceDataType = DataType.entries,
-                            sourceKey = keys,
-                            sourceStorageType = StorageType.entries,
-                            dataTypeChanged = {
-                                dataType.value = it
-                                fieldValue.value = ""
-                                this@SaveActivity.hideKeyboard()
-                                check()
-                            },
-                            keyChanged = {
-                                key.value = it
-                                check()
-                            },
-                            didAddKey = {
-                                this@SaveActivity.route(to = KeyActivity::class.java)
-                            },
-                            storageTypeChanged = {
-                                storageType.value = it
-                                check()
-                            }
+                        Text(
+                            text = "Save",
+                            color = Color.White,
+                            modifier = Modifier.padding(vertical = 8.dp)
                         )
-
-                        HorizontalDivider()
-
-                        Text("Value:")
-
-                        if (dataType.value == DataType.BOOL) {
-                            RadioButtonGroup(
-                                items = listOf("TRUE", "FALSE"),
-                                selectedItem = fieldValue.value,
-                                onItemSelected = { value ->
-                                    fieldValue.value = value
-                                    check()
-                                }
-                            )
-                        }
-
-                        if (dataType.value?.isUseTextField() == true) {
-                            val keyboardType = if (dataType.value?.isNumber() == true) {
-                                KeyboardType.Decimal
-                            } else {
-                                KeyboardType.Text
-                            }
-
-                            TextField(
-                                value = fieldValue.value,
-                                onValueChange = { newValue ->
-                                    fieldValue.value = newValue
-                                    check()
-                                },
-                                label = { Text("Value") },
-                                keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
-                                modifier = Modifier.fillMaxWidth()
-                            )
-                        }
-
-                        Spacer(modifier = Modifier.weight(1f))
-
-
-                        Button(
-                            onClick = { submit() },
-                            enabled = buttonEnabled.value,
-                            shape = RoundedCornerShape(8.dp),
-                            colors = ButtonColors(
-                                containerColor = Color.Blue,
-                                contentColor = Color.White,
-                                disabledContainerColor = Color.Gray,
-                                disabledContentColor = Color.White
-                            ),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 8.dp)
-                        ) {
-                            Text(
-                                text = "Save",
-                                color = Color.White,
-                                modifier = Modifier.padding(vertical = 8.dp)
-                            )
-                        }
                     }
                 }
             }

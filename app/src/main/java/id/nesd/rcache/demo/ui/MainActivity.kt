@@ -19,13 +19,10 @@ import androidx.compose.material.icons.rounded.AddCircle
 import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -33,7 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import id.nesd.rcache.demo.ui.theme.RCacheDemoAndroidTheme
+import id.nesd.rcache.demo.utils.AppScaffold
 import id.nesd.rcache.demo.utils.FloatingMenu
 import id.nesd.rcache.demo.utils.LogManager
 import id.nesd.rcache.demo.utils.LogModel
@@ -43,62 +40,56 @@ class MainActivity : ComponentActivity() {
 
     private var logs = mutableStateListOf<LogModel>()
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            RCacheDemoAndroidTheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                    topBar = {
-                        TopAppBar(title = { Text(text = "RCache") })
-                    },
-                ) { innerPadding ->
-
-                    if (logs.isEmpty()) {
-                        Column(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "RCache")
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier
-                                .padding(innerPadding),
-                            reverseLayout = true,
-                            contentPadding = PaddingValues(12.dp)
-                        ) {
-                            items(logs) { log ->
-                                HorizontalDivider()
-                                Spacer(modifier = Modifier.height(12.dp))
-                                Text(
-                                    text = "Date: ${log.time}\nAction: ${log.action}\nValue: ${log.value}"
-                                )
-                                Spacer(modifier = Modifier.height(12.dp))
-                            }
+            AppScaffold(
+                activity = this,
+                modifier = Modifier.fillMaxSize()
+            ) { innerPadding ->
+                if (logs.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "RCache")
+                    }
+                } else {
+                    LazyColumn(
+                        modifier = Modifier
+                            .padding(innerPadding),
+                        reverseLayout = true,
+                        contentPadding = PaddingValues(12.dp)
+                    ) {
+                        items(logs) { log ->
+                            HorizontalDivider()
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Text(
+                                text = "Date: ${log.time}\nAction: ${log.action}\nValue: ${log.value}"
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
                         }
                     }
-
-                    FloatingMenuHome(onClick = {
-                        when (it) {
-                            MenuRouting.KEY -> route(to = KeyActivity::class.java)
-
-                            MenuRouting.REMOVE -> {
-
-                            }
-
-                            MenuRouting.SAVE -> route(to = SaveActivity::class.java)
-                            MenuRouting.READ -> route(to = ReadActivity::class.java)
-
-                            MenuRouting.CLEAR -> TODO()
-                        }
-                    })
                 }
+
+                FloatingMenuHome(onClick = {
+                    when (it) {
+                        MenuRouting.KEY -> route(to = KeyActivity::class.java)
+
+                        MenuRouting.REMOVE -> {
+
+                        }
+
+                        MenuRouting.SAVE -> route(to = SaveActivity::class.java)
+                        MenuRouting.READ -> route(to = ReadActivity::class.java)
+
+                        MenuRouting.CLEAR -> TODO()
+                    }
+                })
             }
         }
     }

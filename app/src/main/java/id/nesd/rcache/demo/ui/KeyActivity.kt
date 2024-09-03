@@ -10,19 +10,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -37,7 +32,7 @@ import id.nesd.rcache.demo.contracts.KeyContract
 import id.nesd.rcache.demo.models.KeyItem
 import id.nesd.rcache.demo.models.KeyModel
 import id.nesd.rcache.demo.presenters.KeyPresenter
-import id.nesd.rcache.demo.ui.theme.RCacheDemoAndroidTheme
+import id.nesd.rcache.demo.utils.AppScaffold
 import id.nesd.rcache.demo.utils.DismissibleList
 
 class KeyActivity : ComponentActivity(), KeyContract.View {
@@ -46,7 +41,6 @@ class KeyActivity : ComponentActivity(), KeyContract.View {
     private var showAlert: MutableState<Boolean> = mutableStateOf(false)
     private val data = mutableStateListOf<KeyItem>()
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,68 +49,54 @@ class KeyActivity : ComponentActivity(), KeyContract.View {
 
         enableEdgeToEdge()
         setContent {
-            RCacheDemoAndroidTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = { Text(text = "RCache: Key") },
-                            navigationIcon = {
-                                IconButton(onClick = { finish() }) {
-                                    Icon(
-                                        imageVector = Icons.Default.ArrowBack,
-                                        contentDescription = "Back"
-                                    )
-                                }
+            AppScaffold(
+                activity = this,
+                modifier = Modifier.fillMaxSize(),
+                floatingActionButton = {
+                    FloatingActionButton(
+                        onClick = { showAlert.value = true },
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    ) {
+                        Icon(
+                            Icons.Rounded.Add,
+                            contentDescription = "Remove"
+                        )
+                    }
+                }
+            ) { innerPadding ->
+                if (data.isEmpty()) {
+                    Column(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                            .fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(text = "Empty")
+                    }
+                } else {
+                    DismissibleList(
+                        items = data,
+                        modifier = Modifier
+                            .padding(innerPadding),
+                        onDismiss = { item ->
+                            presenter?.delete(item)
+                        }
+                    ) { item ->
+                        ListItem(
+                            headlineContent = {
+                                Text(text = item.name)
                             },
                         )
-                    },
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = { showAlert.value = true },
-                            modifier = Modifier.padding(bottom = 8.dp)
-                        ) {
-                            Icon(
-                                Icons.Rounded.Add,
-                                contentDescription = "Remove"
-                            )
-                        }
                     }
-                ) { innerPadding ->
+                }
 
-                    if (data.isEmpty()) {
-                        Column(
-                            modifier = Modifier
-                                .padding(innerPadding)
-                                .fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(text = "Empty")
-                        }
+                AddKeyDialog(showAlert = showAlert) {
+                    if (it.trim().isEmpty()) {
+                        Toast.makeText(this@KeyActivity, "Cannot be empty", Toast.LENGTH_SHORT)
+                            .show()
                     } else {
-                        DismissibleList(
-                            items = data,
-                            modifier = Modifier
-                                .padding(innerPadding),
-                            onDismiss = { item ->
-                                presenter?.delete(item)
-                            }
-                        ) { item ->
-                            ListItem(
-                                headlineContent = {
-                                    Text(text = item.name)
-                                },
-                            )
-                        }
-                    }
-
-                    AddKeyDialog(showAlert = showAlert) {
-                        if (it.trim().isEmpty()) {
-                            Toast.makeText(this@KeyActivity, "Cannot be empty", Toast.LENGTH_SHORT)
-                                .show()
-                        } else {
-                            presenter?.add(it.trim())
-                        }
+                        presenter?.add(it.trim())
                     }
                 }
             }

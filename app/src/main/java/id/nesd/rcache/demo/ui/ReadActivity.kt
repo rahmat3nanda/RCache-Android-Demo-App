@@ -11,17 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -34,6 +27,7 @@ import id.nesd.rcache.demo.models.KeyModel
 import id.nesd.rcache.demo.models.ReadModel
 import id.nesd.rcache.demo.models.StorageType
 import id.nesd.rcache.demo.presenters.ReadPresenter
+import id.nesd.rcache.demo.utils.AppScaffold
 import id.nesd.rcache.demo.utils.FormHeaderView
 import id.nesd.rcache.demo.utils.Router.route
 
@@ -51,7 +45,6 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
 
     private val buttonEnabled = mutableStateOf(false)
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,21 +52,9 @@ class ReadActivity : ComponentActivity(), ReadContract.View {
 
         enableEdgeToEdge()
         setContent {
-            Scaffold(
-                modifier = Modifier.fillMaxSize(),
-                topBar = {
-                    TopAppBar(
-                        title = { Text(text = "RCache: Save") },
-                        navigationIcon = {
-                            IconButton(onClick = { finish() }) {
-                                Icon(
-                                    imageVector = Icons.Default.ArrowBack,
-                                    contentDescription = "Back"
-                                )
-                            }
-                        },
-                    )
-                },
+            AppScaffold(
+                activity = this,
+                modifier = Modifier.fillMaxSize()
             ) { innerPadding ->
                 Column(
                     modifier = Modifier
